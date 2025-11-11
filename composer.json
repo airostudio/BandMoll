@@ -1,0 +1,23 @@
+{
+    "name": "aussie-band-merch/dropship-plugin",
+    "description": "WordPress plugin for dropshipping Australian band merchandise from second-hand record stores",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "your.email@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "guzzlehttp/guzzle": "^7.5",
+        "sunra/php-simple-html-dom-parser": "^1.5",
+        "monolog/monolog": "^2.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "ABMD\\": "includes/"
+        }
+    }
+}

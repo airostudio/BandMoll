@@ -1,0 +1,202 @@
+/* Admin CSS for Aussie Band Merch Dropship */
+
+.abmd-dashboard {
+    padding: 20px 0;
+}
+
+.abmd-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.abmd-stat-box {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+.abmd-stat-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #646970;
+}
+
+.abmd-stat-box .stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #2271b1;
+}
+
+.abmd-stat-box.abmd-warning .stat-number {
+    color: #d63638;
+}
+
+.abmd-stat-box.abmd-success .stat-number {
+    color: #00a32a;
+}
+
+.abmd-quick-actions {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.abmd-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.abmd-info {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.abmd-info ol {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Import page */
+.abmd-import-container {
+    padding: 20px 0;
+}
+
+.abmd-import-section {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.abmd-progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #f0f0f1;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.abmd-progress-fill {
+    height: 100%;
+    background: #2271b1;
+    width: 0%;
+    transition: width 0.3s;
+    animation: progressAnimation 2s infinite;
+}
+
+@keyframes progressAnimation {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+.abmd-progress-text {
+    text-align: center;
+    font-style: italic;
+}
+
+/* Orders page */
+.abmd-orders-container {
+    padding: 20px 0;
+}
+
+.abmd-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.abmd-status-pending {
+    background: #fcf9e8;
+    color: #8a6d3b;
+}
+
+.abmd-status-placed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.abmd-status-failed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.abmd-status-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.abmd-profit {
+    font-weight: bold;
+    color: #00a32a;
+}
+
+.abmd-orders-summary {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Source products page */
+.abmd-source-products-container {
+    padding: 20px 0;
+}
+
+.abmd-products-summary {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Modal */
+.abmd-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.abmd-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 4px;
+}
+
+.abmd-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.abmd-modal-close:hover {
+    color: #000;
+}
