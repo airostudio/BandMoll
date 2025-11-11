@@ -1,6 +1,6 @@
 # Dependencies
 /vendor/
-composer.lock
+# Note: composer.lock is tracked to ensure consistent dependency versions
 
 # IDE files
 .idea/

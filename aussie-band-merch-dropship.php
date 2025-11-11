@@ -26,8 +26,33 @@ define('ABMD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ABMD_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ABMD_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-// Autoload dependencies
-require_once ABMD_PLUGIN_DIR . 'vendor/autoload.php';
+/**
+ * Check if Composer dependencies are installed
+ */
+function abmd_check_dependencies() {
+    $autoload_file = ABMD_PLUGIN_DIR . 'vendor/autoload.php';
+
+    if (!file_exists($autoload_file)) {
+        add_action('admin_notices', function() {
+            ?>
+            <div class="notice notice-error">
+                <p><strong>Aussie Band Merch Dropship Error:</strong> Composer dependencies are missing.</p>
+                <p>Please run <code>composer install</code> in the plugin directory: <code><?php echo esc_html(ABMD_PLUGIN_DIR); ?></code></p>
+                <p>Or download the complete plugin package with dependencies included.</p>
+            </div>
+            <?php
+        });
+        return false;
+    }
+
+    require_once $autoload_file;
+    return true;
+}
+
+// Check dependencies first
+if (!abmd_check_dependencies()) {
+    return;
+}
 
 // Include core classes
 require_once ABMD_PLUGIN_DIR . 'includes/class-activator.php';
