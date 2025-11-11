@@ -15,7 +15,12 @@ class ABMD_Admin {
     /**
      * Enqueue admin styles
      */
-    public function enqueue_styles() {
+    public function enqueue_styles($hook) {
+        // Only load on our plugin pages
+        if (!$this->is_plugin_page($hook)) {
+            return;
+        }
+
         wp_enqueue_style(
             $this->plugin_name,
             ABMD_PLUGIN_URL . 'admin/css/admin.css',
@@ -28,19 +33,40 @@ class ABMD_Admin {
     /**
      * Enqueue admin scripts
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts($hook) {
+        // Only load on our plugin pages
+        if (!$this->is_plugin_page($hook)) {
+            return;
+        }
+
         wp_enqueue_script(
             $this->plugin_name,
             ABMD_PLUGIN_URL . 'admin/js/admin.js',
             ['jquery'],
             $this->version,
-            false
+            true  // Load in footer
         );
 
         wp_localize_script($this->plugin_name, 'abmdAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('abmd-admin-nonce'),
         ]);
+    }
+
+    /**
+     * Check if current page is a plugin page
+     */
+    private function is_plugin_page($hook) {
+        // List of our plugin page hooks
+        $plugin_pages = [
+            'toplevel_page_' . $this->plugin_name,
+            'band-merch_page_' . $this->plugin_name . '-import',
+            'band-merch_page_' . $this->plugin_name . '-orders',
+            'band-merch_page_' . $this->plugin_name . '-source-products',
+            'band-merch_page_' . $this->plugin_name . '-settings',
+        ];
+
+        return in_array($hook, $plugin_pages);
     }
 
     /**
@@ -126,6 +152,14 @@ class ABMD_Admin {
         $table_products = $wpdb->prefix . 'abmd_source_products';
         $table_orders = $wpdb->prefix . 'abmd_dropship_orders';
 
+        // Check if tables exist, if not show setup message
+        if (!$this->tables_exist()) {
+            echo '<div class="wrap"><h1>Aussie Band Merch Dropship</h1>';
+            echo '<div class="notice notice-warning"><p>Database tables not found. Please deactivate and reactivate the plugin to create them.</p></div>';
+            echo '</div>';
+            return;
+        }
+
         $total_products = $wpdb->get_var("SELECT COUNT(*) FROM $table_products");
         $total_orders = $wpdb->get_var("SELECT COUNT(*) FROM $table_orders");
         $pending_orders = $wpdb->get_var("SELECT COUNT(*) FROM $table_orders WHERE status = 'pending'");
@@ -147,6 +181,13 @@ class ABMD_Admin {
     public function display_orders_page() {
         global $wpdb;
 
+        if (!$this->tables_exist()) {
+            echo '<div class="wrap"><h1>Dropship Orders</h1>';
+            echo '<div class="notice notice-warning"><p>Database tables not found. Please deactivate and reactivate the plugin.</p></div>';
+            echo '</div>';
+            return;
+        }
+
         $table = $wpdb->prefix . 'abmd_dropship_orders';
         $orders = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
 
@@ -159,10 +200,32 @@ class ABMD_Admin {
     public function display_source_products() {
         global $wpdb;
 
+        if (!$this->tables_exist()) {
+            echo '<div class="wrap"><h1>Source Products</h1>';
+            echo '<div class="notice notice-warning"><p>Database tables not found. Please deactivate and reactivate the plugin.</p></div>';
+            echo '</div>';
+            return;
+        }
+
         $table = $wpdb->prefix . 'abmd_source_products';
         $products = $wpdb->get_results("SELECT * FROM $table ORDER BY last_synced DESC LIMIT 100");
 
         include ABMD_PLUGIN_DIR . 'admin/views/source-products.php';
+    }
+
+    /**
+     * Check if database tables exist
+     */
+    private function tables_exist() {
+        global $wpdb;
+
+        $table_products = $wpdb->prefix . 'abmd_source_products';
+        $table_orders = $wpdb->prefix . 'abmd_dropship_orders';
+
+        $products_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_products'") === $table_products;
+        $orders_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_orders'") === $table_orders;
+
+        return $products_exists && $orders_exists;
     }
 
     /**
